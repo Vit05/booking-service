@@ -8,7 +8,7 @@ import TimePicker from "material-ui/TimePicker";
 require("react-big-calendar/lib/css/react-big-calendar.css");
 
 BigCalendar.momentLocalizer(moment);
-
+//Calendar app
 class Calendar extends Component {
   constructor() {
     super();
