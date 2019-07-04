@@ -160,9 +160,10 @@ class Calendar extends Component {
         {/* react-big-calendar library utilized to render calendar*/}
         <BigCalendar
           events={this.state.events}
-          views={["month", "week", "day", "agenda"]}
-          timeslots={2}
-          defaultView="month"
+          views={["month", "week", "day"]}
+          timeslots={1}
+          step={60}
+          defaultView="day"
           defaultDate={new Date()}
           selectable={true}
           onSelectEvent={event => this.handleEventSelected(event)}
