@@ -1,7 +1,7 @@
-const eventsLoaded = (newEvents) => {
+const eventsLoaded = (events) => {
     return {
         type: 'FETCH_EVENTS_SUCCESS',
-        payload: newEvents
+        payload: events
     }
 }
 
@@ -15,14 +15,30 @@ const eventsRequested = () => {
 const eventsError = (error) => {
     return {
         type: 'FETCH_EVENTS_FAILURE',
-        payload: error
+        payload: error.message
     }
 }
+
 const fetchEvents = (eventBookingService, dispatch) => () => {
     dispatch(eventsRequested());
     eventBookingService.getEvents()
         .then((data) => dispatch(eventsLoaded(data)))
         .catch((err) => dispatch(eventsError(err)))
+}
+
+
+export const eventAddedToCalendar = (newEvent)=>{
+    return {
+        type: 'EVENT_ADDED_TO_CALENDAR',
+        payload: newEvent
+    }
+}
+
+export const eventRemoveFromCalendar = (eventId)=>{
+    return {
+        type: 'EVENT_REMOVE_FROM_CALENDAR',
+        payload: eventId
+    }
 }
 
 export {

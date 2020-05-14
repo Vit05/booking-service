@@ -9,7 +9,8 @@ import Dialog from "material-ui/Dialog";
 import FlatButton from "material-ui/FlatButton";
 import TextField from "material-ui/TextField";
 import TimePicker from "material-ui/TimePicker";
-import {fetchEvents} from '../actions'
+import {fetchEvents, eventAddedToCalendar, eventRemoveFromCalendar} from '../actions'
+import nextId from "react-id-generator";
 
 require("react-big-calendar/lib/css/react-big-calendar.css");
 
@@ -22,6 +23,7 @@ class Calendar extends Component {
     constructor() {
         super();
         this.state = {
+            id:null,
             title: "",
             start: "",
             end: "",
@@ -34,9 +36,7 @@ class Calendar extends Component {
     }
 
     componentDidMount() {
-        // this.getCachedEvents();
-        console.log("Events",this.props.fetchEvents());
-
+        this.props.fetchEvents()
     }
 
     getCachedEvents() {
@@ -55,9 +55,6 @@ class Calendar extends Component {
 
     //  Allows user to click on calendar slot and handles if appointment exists
     handleSlotSelected(slotInfo) {
-        console.log("Real slotInfo START", slotInfo.start);
-        console.log("Real slotInfo END", typeof slotInfo.end);
-        console.log("Real slotInfo", slotInfo);
         this.setState({
             title: "",
             desc: "",
@@ -70,6 +67,7 @@ class Calendar extends Component {
     handleEventSelected(event) {
         console.log("event", event);
         this.setState({
+            id:event.id,
             openEvent: true,
             clickedEvent: event,
             start: event.start,
@@ -95,15 +93,13 @@ class Calendar extends Component {
         this.setState({end: date});
     };
 
-    // Onclick callback function that pushes new appointment into events array.
     setNewAppointment() {
+        const id = nextId()
+
         const {start, end, title, desc} = this.state;
-        let appointment = {title, start, end, desc};
-        let events = this.state.events.slice();
-        events.push(appointment);
-        // localStorage.setItem("cachedEvents", JSON.stringify(events));
-        console.log(events);
-        this.setState({events});
+        let appointment = {id, title, start, end, desc};
+        console.log(appointment);
+        this.props.onAddedToCalendar(appointment)
         this.handleClose()
     }
 
@@ -125,18 +121,21 @@ class Calendar extends Component {
 
     //  filters out specific event that is to be deleted and set that variable to state
     deleteEvent() {
-        let updatedEvents = this.state.events.filter(
-            event => event["start"] !== this.state.start
-        );
-        localStorage.setItem("cachedEvents", JSON.stringify(updatedEvents));
-        this.setState({events: updatedEvents});
+        // let updatedEvents = this.state.events.filter(
+        //     event => event["start"] !== this.state.start
+        // );
+        // localStorage.setItem("cachedEvents", JSON.stringify(updatedEvents));
+        // this.setState({events: updatedEvents});
+
+        this.props.onDeletedFromCalendar(this.state.id)
+
         this.handleClose()
     }
 
     render() {
-        console.log("render()");
-        console.log(this.state.events);
-        const {events, loading, error} = this.props
+        // console.log("render()");
+        // console.log(this.state.events);
+        const {events, loading, error, onAddedToCalendar} = this.props
 
         const eventActions = [
             <FlatButton
@@ -163,8 +162,10 @@ class Calendar extends Component {
                 }}
             />
         ];
+
         const appointmentActions = [
-            <FlatButton label="Cancel" secondary={true} onClick={this.handleClose}/>,
+            <FlatButton label="Cancel" secondary={true}
+                        onClick={this.handleClose}/>,
             <FlatButton
                 label="Submit"
                 primary={true}
@@ -182,7 +183,6 @@ class Calendar extends Component {
         }
         return (
             <div id="Calendar">
-                {/* react-big-calendar library utilized to render calendar*/}
                 <BigCalendar
                     events={events}
                     views={["month", "week", "work_week", "day", "agenda"]}
@@ -292,6 +292,8 @@ const mapStateToProps = ({eventBookingList:{events, loading, error}}) => {
 const mapDispatchToProps = (dispatch, {eventBookingService}) => {
     return {
         fetchEvents: fetchEvents(eventBookingService, dispatch),
+        onAddedToCalendar: (newEvent)=>dispatch(eventAddedToCalendar(newEvent)),
+        onDeletedFromCalendar: (eventId)=>dispatch(eventRemoveFromCalendar(eventId))
     }
 }
 

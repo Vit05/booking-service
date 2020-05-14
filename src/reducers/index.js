@@ -1,4 +1,5 @@
 import updateEventBookingList from "./event-booking-list";
+// import eventAddedToCalendar from "./event-booking-events";
 
 const initialState = {
 
@@ -16,6 +17,8 @@ const reducer = (state, action) => {
 
     return {
         eventBookingList: updateEventBookingList(state, action),
+
+        // eventBookingList: updateEventBookingList(state, action),
     }
 
 

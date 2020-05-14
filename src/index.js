@@ -13,7 +13,7 @@ import {EventBookingServiceProvider} from "./components/event-booking-service-co
 import store from "./store";
 
 const eventBookingService = new EventBookingService()
-console.log(eventBookingService.getEvents());
+// console.log(eventBookingService.getEvents());
 ReactDOM.render(
     <Provider store={store}>
         <ErrorBoundry>
@@ -23,6 +23,6 @@ ReactDOM.render(
                 </EventBookingServiceProvider>
             </MuiThemeProvider>
         </ErrorBoundry>
-    </Provider>
-    , document.getElementById('root'));
+    </Provider>,
+    document.getElementById('root'));
 registerServiceWorker();

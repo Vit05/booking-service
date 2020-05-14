@@ -1,5 +1,9 @@
+const removeEvent = (items, id)=>{
+    return items.filter((item)=>item.id !==id)
+}
+
 const updateEventBookingList = (state, action) => {
-    if (state === undefined){
+    if (state === undefined) {
         return {
             events: [],
             loading: true,
@@ -27,9 +31,26 @@ const updateEventBookingList = (state, action) => {
                 loading: false,
                 error: action.payload
             }
+
+        case 'EVENT_ADDED_TO_CALENDAR':
+            return {
+                events: [...state.eventBookingList.events,
+                    action.payload],
+                loading: false,
+                error: null
+            }
+
+        case 'EVENT_REMOVE_FROM_CALENDAR':
+            console.log(removeEvent(state.eventBookingList.events, action.payload));
+            return {
+                events: removeEvent(state.eventBookingList.events, action.payload),
+                loading: false,
+                error: null
+            }
         default:
             return state.eventBookingList
     }
 }
+
 
 export default updateEventBookingList
