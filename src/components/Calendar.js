@@ -252,7 +252,7 @@ class Calendar extends Component {
 
         const TouchCellWrapper = ({ children, value, onSelectSlot }) => (
             React.cloneElement(React.Children.only(children), {
-                onTouchEnd: () => console.log(onSelectSlot)
+                onTouchEnd: () => onSelectSlot({ action: 'click', slots: [value] }),
             })
         );
 
