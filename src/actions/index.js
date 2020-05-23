@@ -41,6 +41,22 @@ export const eventRemoveFromCalendar = (eventId)=>{
     }
 }
 
+export const eventUpdateFromCalendar = (updateEvent)=>{
+    return {
+        type: 'EVENT_UPDATE_FROM_CALENDAR',
+        payload: updateEvent
+    }
+}
+
+export const dayEventsLoaded = (currentDay, daySchedule) => {
+    return {
+        type: 'FETCH_DAY_EVENTS_SUCCESS',
+        currentDay,
+        daySchedule
+    }
+}
+
+
 export {
     fetchEvents
 }

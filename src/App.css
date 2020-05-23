@@ -38,3 +38,22 @@ h1{
     display: block !important;
   }
 }
+
+
+
+
+/*
+.rbc-time-view .rbc-row {
+    min-height: 0px;
+}
+*/
+
+.rbc-time-header .rbc-row:nth-child(2) {
+    /*height: 0px !important;*/
+    background-color: red;
+    display: none;
+}
+
+.rbc-time-content{
+    border-top: 0;
+}
