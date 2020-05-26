@@ -1,0 +1,16 @@
+
+@import '~@fullcalendar/core/main.css';
+@import '~@fullcalendar/daygrid/main.css';
+@import '~@fullcalendar/timegrid/main.css';
+@import '~react-responsive-modal/styles.css';
+
+
+.MuiFormGroup-root{
+  margin-bottom: 20px;
+}
+.fc-time-grid .fc-slats td {
+  height: 45px;}
+.fc-toolbar.fc-header-toolbar{
+  display: flex;
+  flex-wrap: wrap;
+}

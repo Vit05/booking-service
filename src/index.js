@@ -1,9 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import App from './App';
-import registerServiceWorker from './registerServiceWorker';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+// import registerServiceWorker from './registerServiceWorker';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'; // v1.x
+import blue from '@material-ui/core/colors/blue';
+
 
 import {Provider} from "react-redux"
 import {BrowserRouter as Router} from "react-router-dom"
@@ -13,16 +14,21 @@ import {EventBookingServiceProvider} from "./components/event-booking-service-co
 import store from "./store";
 
 const eventBookingService = new EventBookingService()
-// console.log(eventBookingService.getEvents());
+
+const theme = createMuiTheme({
+    palette: {
+        primary: blue,
+    },
+});
 ReactDOM.render(
     <Provider store={store}>
         <ErrorBoundry>
-            <MuiThemeProvider>
+            {/*<MuiThemeProvider theme={theme}>*/}
+
                 <EventBookingServiceProvider value={eventBookingService}>
                     <App/>
                 </EventBookingServiceProvider>
-            </MuiThemeProvider>
+            {/*</MuiThemeProvider>*/}
         </ErrorBoundry>
     </Provider>,
     document.getElementById('root'));
-registerServiceWorker();

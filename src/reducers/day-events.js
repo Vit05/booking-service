@@ -81,8 +81,8 @@ const updateCurrentDayEvents = (state, action) => {
         case 'FETCH_DAY_EVENTS_SUCCESS':
             const curDayEvents = getDayEvents(state.eventBookingList.events, action.currentDay)
             const freeEvents = getFreeEvents(action.daySchedule, curDayEvents)
-            console.log("DAY EVENTS---", curDayEvents);
-            console.log("FREE EVENTS---", freeEvents);
+            // console.log("DAY EVENTS---", curDayEvents);
+            // console.log("FREE EVENTS---", freeEvents);
 
             return {
                 currentDayEvents: curDayEvents,
