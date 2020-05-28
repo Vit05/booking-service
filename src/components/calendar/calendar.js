@@ -1,4 +1,5 @@
 import React, {Component, Fragment} from 'react'
+import ReactDOM from 'react-dom';
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -45,7 +46,8 @@ const isMob = isMobile;
 
 const viewBarDesktop = isMob ? "" : "dayGridMonth,timeGridWeek,timeGridDay,listWeek,timeGridFourDay"
 const viewBarMobile = isMob ? "dayGridMonth,timeGridDay,listWeek,timeGridFourDay" : ""
-console.log("IS MOBILE???", isMob);
+
+const viewDefault = isMob ? "timeGridFourDay" : "timeGridWeek";
 const calendarHeader = {
     left: "prev,next, today",
     center: "title",
@@ -61,6 +63,38 @@ const calendarView = {
         buttonText: '3 Дня'
     }
 }
+const EventDetail = ({event, el, view}) => {
+    let content
+    if (view.type == "listWeek") {
+        content = <Fragment>
+            <td>
+                <span>{moment(event.start).locale('ru').format("LT")} - {moment(event.end).locale("ru").format("LT")}</span>
+            </td>
+            <td>{event.title}</td>
+            <td>{event.extendedProps.desc.text}</td>
+        </Fragment>;
+    } else {
+        content = <div className="eventItem">
+            <p>
+                <span>{moment(event.start).locale('ru').format("LT")} - {moment(event.end).locale("ru").format("LT")}</span>
+            </p>
+            <p>{event.title}</p>
+            <p>{event.extendedProps.desc.text}</p>
+        </div>
+    }
+
+    ReactDOM.render(content, el);
+    return el;
+};
+
+
+const services = {
+    "haircut": "Стрижка",
+    "make_up": "Make up",
+    "manicure": "Маникюр",
+    "eyebrowe": "Брови",
+    "hair_color": "Окрашивание волос"
+}
 
 class Calendar extends Component {
     state = {
@@ -68,10 +102,13 @@ class Calendar extends Component {
         title: "",
         start: "",
         end: "",
-        timeEvent: null,
+        timeEvent: "",
         curDay: "",
         allDay: false,
-        desc: "",
+        desc: {
+            value: "",
+            text: ""
+        },
         openSlot: false,
         openEvent: false,
         dateNow: null,
@@ -109,7 +146,7 @@ class Calendar extends Component {
                 <FullCalendar
                     locale={ru}
                     firstDay={1}
-                    defaultView="dayGridMonth"
+                    defaultView={viewDefault}
                     header={calendarHeader}
                     footer={calendarFooter}
                     views={calendarView}
@@ -127,7 +164,8 @@ class Calendar extends Component {
                     eventClick={(value) => this.handleEventSelected(value)}
                     ref={this.calendarComponentRef}
                     navLinks={true}
-
+                    editable={true}
+                    eventRender={EventDetail}
                     navLinkDayClick={this.goToDate}
                     events={events}/>
                 <Dialog
@@ -157,7 +195,7 @@ class Calendar extends Component {
                                     onChange={(e) => this.handleDescription(e.target.value)}
                                     name="service"
                                     select
-                                    value={this.state.desc}
+                                    value={this.state.desc.value}
                                     validators={['required']}
                                     errorMessages={['Это поле обязательно']}>
                                     <MenuItem value="haircut">Стрижка</MenuItem>
@@ -183,7 +221,57 @@ class Calendar extends Component {
                                         </MenuItem>
                                     )}
                                 </TextValidator>
-                                {/* <FormControl>
+                            </FormGroup>
+                        </DialogContent>
+
+                        {appointmentActions}
+                    </ValidatorForm>
+                </Dialog>
+
+
+                <Dialog
+                    open={this.state.openEvent}
+                    onClose={this.handleClose}>
+                    <ValidatorForm
+                        ref="form"
+                        onSubmit={() => this.updateEvent()}>
+                        <DialogTitle onClose={this.handleClose}>
+                            {`Просмотр/перенос услуги`}
+                        </DialogTitle>
+                        <DialogContent dividers>
+                            <FormGroup>
+                                <TextValidator
+                                    label="Ф.И.О."
+                                    onChange={(e) => this.handleTitle(e.target.value)}
+                                    name="full_name"
+                                    value={this.state.title}
+                                    validators={['required']}
+                                    errorMessages={['Это поле обязательно']}
+                                />
+                            </FormGroup>
+
+                            <FormGroup>
+                                <TextValidator
+                                    label="Услуга"
+                                    onChange={(e) => this.handleDescription(e.target.value)}
+                                    name="service"
+                                    select
+                                    value={this.state.desc.value}
+                                    validators={['required']}
+                                    errorMessages={['Это поле обязательно']}>
+                                    <MenuItem value="haircut">Стрижка</MenuItem>
+                                    <MenuItem value="make_up">Make up</MenuItem>
+                                    <MenuItem value="manicure">Маникюр</MenuItem>
+                                    <MenuItem value="eyebrowe">Брови</MenuItem>
+                                    <MenuItem value="pedicure">Педикюр</MenuItem>
+                                    <MenuItem value="hair_color">Окрашивание волос</MenuItem>
+                                </TextValidator>
+                            </FormGroup>
+
+                            {/*
+                            <FormGroup>
+
+                                <FormControl>
                                     <InputLabel htmlFor="time">Время</InputLabel>
                                     <Select id="time"
                                             value={this.state.timeEvent}
@@ -196,62 +284,36 @@ class Calendar extends Component {
                                         )}
 
                                     </Select>
-                                </FormControl>*/}
+                                </FormControl>
                             </FormGroup>
-                        </DialogContent>
-
-                        {appointmentActions}
-                    </ValidatorForm>
-                </Dialog>
 
 
-                <Dialog
-                    open={this.state.openEvent}
-                    onClose={this.handleClose}>
-                    <DialogTitle onClose={this.handleClose}>
-                        {`Просмотр/перенос услуги`}
-                    </DialogTitle>
-                    <DialogContent dividers>
-                        <FormGroup>
-                            <FormControl>
-                                <InputLabel htmlFor="name">Ф.И.О.</InputLabel>
-                                <Input id="name" value={this.state.title} onChange={e => {
-                                    this.handleTitle(e.target.value);
-                                }}/>
-                            </FormControl>
-                        </FormGroup>
+                            <hr/>*/}
 
-                        <FormGroup>
 
-                            <FormControl>
-                                <InputLabel htmlFor="service">Услуга</InputLabel>
-                                <Input id="service" value={this.state.desc} onChange={e => {
-                                    this.handleDescription(e.target.value)
-                                }}/>
-                            </FormControl>
-                        </FormGroup>
-
-                        <FormGroup>
-
-                            <FormControl>
-                                <InputLabel htmlFor="time">Время</InputLabel>
-                                <Select id="time"
-                                        value={this.state.timeEvent}
-                                        onChange={this.handleTimeEventChange}>
-
+                            <FormGroup>
+                                <TextValidator
+                                    label="Время"
+                                    value={this.state.timeEvent}
+                                    onChange={this.handleTimeEventChange}
+                                    name="time"
+                                    select
+                                    validators={['required', 'notEmpty']}
+                                    errorMessages={['Это поле обязательно']}>
+                                    <MenuItem value="">
+                                        Placeholder
+                                    </MenuItem>
                                     {daySchedule.map((item, key) =>
                                         <MenuItem key={key} value={`${item.startVal}_${item.endVal}`}>
                                             {new Date(item.startVal).getHours()} - {new Date(item.endVal).getHours()}
                                         </MenuItem>
                                     )}
+                                </TextValidator>
+                            </FormGroup>
+                        </DialogContent>
 
-                                </Select>
-                            </FormControl>
-                        </FormGroup>
-                    </DialogContent>
-
-                    {eventActions}
-
+                        {eventActions}
+                    </ValidatorForm>
                 </Dialog>
             </Fragment>
 
@@ -272,21 +334,21 @@ class Calendar extends Component {
     }
 
     handleDescription(e) {
-        this.setState({desc: e});
+        const optionText = services[e]
+        this.setState({
+            desc: {
+                value: e,
+                text: optionText
+            }
+        });
+
     }
 
     handleTimeEventChange = (event, data) => {
-        console.log("handleTimeEventChange ");
+        console.log(event);
         const val = event.target.value.split("_")
-
         const startEventTime = Number(val[0])
         const endEventTime = Number(val[1])
-        /* console.log("Select value---", {
-                 timeEvent: event.target.value,
-                 start: new Date(startEventTime),
-                 end: new Date(endEventTime)
-             }
-         );*/
 
         this.setState({
             timeEvent: event.target.value,
@@ -294,6 +356,18 @@ class Calendar extends Component {
             end: new Date(endEventTime)
         })
     };
+   /* handleTimeEventChange2 = (event, data) => {
+        console.log(event);
+        const val = event.target.value.split("_")
+        const startEventTime = Number(val[0])
+        const endEventTime = Number(val[1])
+
+        this.setState({
+            timeEvent: event.target.value,
+            start: new Date(startEventTime),
+            end: new Date(endEventTime)
+        })
+    };*/
 
     getCurrentSchedule = (currentDay) => {
         let schedule = []
@@ -322,60 +396,62 @@ class Calendar extends Component {
     }
 
     handleSlotSelected = (slotInfo) => {
-        console.log(slotInfo.date.getHours());
         const curDay = this.getSelectedDay(slotInfo.date)
-
         const daySchedule = this.getCurrentSchedule(curDay)
-
         this.props.onDayEventsLoad(curDay, daySchedule)
         let timeVal;
         let slotInfoDate = slotInfo.date
 
         if (slotInfoDate.getHours() === 0) {
             timeVal = ""
-        }else{
+        } else {
             timeVal = `${slotInfoDate.valueOf()}_${slotInfoDate.valueOf() + 3600000}`
         }
+        const start = new Date(slotInfoDate.valueOf());
+        const end = new Date(slotInfoDate.setHours(slotInfoDate.getHours() + 1))
 
         const openSlot = this.handleDateNow(slotInfo.date.valueOf())
-        console.log("DS", daySchedule);
-        console.log("CD", curDay);
         this.setState({
             title: "",
-            desc: "",
-            start: slotInfo.date,
+            desc: {
+                value: "",
+                text: ""
+            },
+            start: start,
             timeEvent: timeVal,
-            end: slotInfo.date,
+            end: end,
             curDay: slotInfo.curDay,
             allDay: false,
             openSlot: openSlot,
             dayNow: openSlot
 
         });
-        console.log("SLOT STATE___", this.state);
-
     }
 
     handleEventSelected(eventItem) {
-        // console.log(eventItem);
+        console.log(eventItem);
+        console.log(this.state.timeEvent);
         const curDay = this.getSelectedDay(eventItem.event.start)
         const daySchedule = this.getCurrentSchedule(curDay)
         this.props.onDayEventsLoad(curDay, daySchedule)
         const openSlot = this.handleDateNow(eventItem.event.start.valueOf())
+        let slotInfoDate = eventItem.event
+
+        let timeVal
+
+            timeVal = `${slotInfoDate.extendedProps.startVal}_${slotInfoDate.extendedProps.startVal}`
+
         this.setState({
             id: eventItem.event.id,
             title: eventItem.event.title,
             desc: eventItem.event.extendedProps.desc,
             start: eventItem.event.start,
-            // timeEvent: timeVal,
-            end: eventItem.event.start,
-            // curDay: curDay,
+            end: eventItem.event.end,
             allDay: false,
             openEvent: true,
-            dayNow: openSlot
 
+            dayNow: openSlot
         });
-        console.log("EVENT STATE___", this.state);
 
     }
 
@@ -386,20 +462,16 @@ class Calendar extends Component {
         let startVal = start.valueOf()
         let endVal = end.valueOf()
         let appointment = {id, title, start, end, desc, curDay, startVal, endVal};
-        // console.log(appointment);
         this.props.onAddedToCalendar(appointment)
         this.handleClose()
     }
 
     updateEvent() {
-        const {id, start, end} = this.state;
+        const {id, start, end, timeEvent} = this.state;
         const curDay = this.getSelectedDay(start)
         let startVal = start.valueOf()
         let endVal = end.valueOf()
-        // const index = events.findIndex(event => event === clickedEvent);
-        let appointment = {id, start, end, curDay, startVal, endVal};
-        // console.log(appointment);
-
+        let appointment = {id, start, end, curDay, startVal, endVal, timeEvent};
         this.props.onUpdateFromCalendar(appointment)
         this.handleClose()
     }

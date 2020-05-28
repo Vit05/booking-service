@@ -2,15 +2,40 @@
 @import '~@fullcalendar/core/main.css';
 @import '~@fullcalendar/daygrid/main.css';
 @import '~@fullcalendar/timegrid/main.css';
-@import '~react-responsive-modal/styles.css';
 
 
 .MuiFormGroup-root{
   margin-bottom: 20px;
 }
 .fc-time-grid .fc-slats td {
-  height: 45px;}
+  height: 65px;}
+
 .fc-toolbar.fc-header-toolbar{
   display: flex;
   flex-wrap: wrap;
+}
+
+.eventItem{
+
+
+  p{
+    margin: 0;
+    line-height: 1.1;
+    color: #484848;
+  }
+}
+.fc-event{
+  background-color: rgba(255, 215, 170, 1);
+  padding: 3px;
+  border: 1px solid #484848;
+}
+.fc-list-item{
+  background-color: #cdcdcd;
+  border-bottom: 1px solid #484848;
+  display: table-row;
+
+  .eventItem{
+    width: 100%;
+    display: block;
+  }
 }
