@@ -19,6 +19,7 @@ export default class EventBookingService {
             startVal: new Date(2020, 5, 2, 15, 0, 0).valueOf(),
             endVal: new Date(2020, 5, 2, 16, 0, 0).valueOf(),
             curDay: new Date(2020, 5, 2, 0, 0, 0).valueOf(),
+            timeEvent: `${new Date(2020, 5, 2, 15, 0, 0).valueOf()}_${new Date(2020, 5, 2, 16, 0, 0).valueOf()}`,
             desc: {value: "hair_cut", text: "Стрижка", time: 2}
         },
         {

@@ -23,8 +23,8 @@ import './main.scss'
 
 import AppointmentDialog from "../dialog/appointmentDialog";
 import EventDialog from "../dialog/eventDialog";
-import {getAppointmentsFreeTime} from "../../utils/appointments_time";
-
+import {getAppointmentFreeTimes as utilGetAppointmentFreeTimes} from "../../utils/getAppointmentFreeTimes";
+import {getSelectedDay as utilGetSelectedDay} from "../../utils/getSelectedDay";
 
 const isMob = isMobile;
 
@@ -152,84 +152,16 @@ class Calendar extends Component {
 
                 <AppointmentDialog data={this.state.appointmentDialog} onCloseAction={this.handleClose}/>
 
-
                 <EventDialog data={this.state.eventDialogData} onCloseAction={this.handleClose}/>
-                {/*<Dialog
-                    open={this.state.openEvent}
-                    onClose={this.handleClose}>
-                    <ValidatorForm
-                        ref="form"
-                        onSubmit={() => this.updateEvent()}>
-                        <DialogTitle onClose={this.handleClose}>
-                            {`Просмотр/перенос услуги`}
-                        </DialogTitle>
-                        <DialogContent dividers>
-                            <FormGroup>
-                                <TextValidator
-                                    label="Ф.И.О."
-                                    onChange={(e) => this.handleTitle(e.target.value)}
-                                    name="full_name"
-                                    value={this.state.title}
-                                    validators={['required']}
-                                    errorMessages={['Это поле обязательно']}
-                                />
-                            </FormGroup>
-
-                            <FormGroup>
-                                <TextValidator
-                                    label="Услуга"
-                                    onChange={(e) => this.handleDescription(e.target.value)}
-                                    name="service"
-                                    select
-                                    value={this.state.desc.value}
-                                    validators={['required']}
-                                    errorMessages={['Это поле обязательно']}>
-                                    <MenuItem value="haircut">Стрижка</MenuItem>
-                                    <MenuItem value="make_up">Make up</MenuItem>
-                                    <MenuItem value="manicure">Маникюр</MenuItem>
-                                    <MenuItem value="eyebrowe">Брови</MenuItem>
-                                    <MenuItem value="pedicure">Педикюр</MenuItem>
-                                    <MenuItem value="hair_color">Окрашивание волос</MenuItem>
-                                </TextValidator>
-                            </FormGroup>
-
-                            <FormGroup>
-                                <TextValidator
-                                    label="Время"
-                                    value={this.state.timeEvent}
-                                    onChange={this.handleTimeEventChange}
-                                    name="time"
-                                    select
-                                    validators={['required', 'notEmpty']}
-                                    errorMessages={['Это поле обязательно']}>
-                                    <MenuItem value="">
-                                        Placeholder
-                                    </MenuItem>
-                                    {daySchedule.map((item, key) =>
-                                        <MenuItem key={key} value={`${item.startVal}_${item.endVal}`}>
-                                            {new Date(item.startVal).getHours()} - {new Date(item.endVal).getHours()}
-                                        </MenuItem>
-                                    )}
-                                </TextValidator>
-                            </FormGroup>
-                        </DialogContent>
-
-                        {eventActions}
-                    </ValidatorForm>
-                </Dialog>*/}
             </Fragment>
 
         )
     }
 
-    getSelectedDay = (val) => {
-        return new Date(val.getFullYear(), val.getMonth(), val.getDate(), 0, 0, 0).valueOf()
-    }
-
     handleDateNow = (selected) => {
         const dateNow = new Date(Date.now())
         let openSlot;
-        selected < this.getSelectedDay(dateNow) ? openSlot = false : openSlot = true
+        selected < utilGetSelectedDay(dateNow) ? openSlot = false : openSlot = true
         return openSlot
     }
 
@@ -263,28 +195,31 @@ class Calendar extends Component {
                 },
                 freeTimes: [],
                 dayEventsLoad: [],
-                daySchedule: []
+                daySchedule: [],
+                isView: ''
             }
         });
     }
 
     handleDayEventsLoad = (day) => {
-        const curDay = this.getSelectedDay(day)
+        const curDay = utilGetSelectedDay(day)
         const dayEventsLoad = this.props.onDayEventsLoad(curDay)
         return dayEventsLoad
     }
 
     handleSlotSelected = (slotInfo) => {
         const dayEventsLoad = this.handleDayEventsLoad(slotInfo.date)
+        const isOpenSlot = this.handleDateNow(slotInfo.date)
+        console.log(slotInfo);
         this.setState({
             appointmentDialog: {
                 id: null,
                 title: "",
-                start: "",
+                start: slotInfo.date,
                 end: "",
                 startVal: "",
                 endVal: "",
-                openSlot: true,
+                openSlot: isOpenSlot,
                 timeEvent: "",
                 desc: {
                     value: "",
@@ -299,11 +234,12 @@ class Calendar extends Component {
 
     handleEventSelected(eventItem) {
 
-        const curDay = this.getSelectedDay(eventItem.event.start)
+        const curDay = utilGetSelectedDay(eventItem.event.start)
         const dayEventsLoad = this.props.onDayEventsLoad(curDay)
         const serviceOption = eventItem.event.extendedProps.desc
-        const freeOptions = getAppointmentsFreeTime(this.props.daySchedule, serviceOption.time)
-
+        const freeOptions = utilGetAppointmentFreeTimes(this.props.daySchedule, serviceOption.time)
+        const isView = this.handleDateNow(eventItem.event.start)
+        console.log(eventItem.event.extendedProps);
         this.setState({
             eventDialogData: {
                 openEvent: true,
@@ -321,10 +257,12 @@ class Calendar extends Component {
                 },
                 curDay: curDay,
                 freeTimes: freeOptions,
-                dayEventsLoad: [],
-                daySchedule: []
+                dayEventsLoad: dayEventsLoad,
+                daySchedule: [],
+                isView: isView
             }
         })
+        console.log(this.state.eventDialogData);
 
     }
 

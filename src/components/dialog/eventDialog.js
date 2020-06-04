@@ -13,6 +13,7 @@ import {
 } from "../../actions";
 import {connect} from "react-redux";
 import moment from "moment";
+import {getSelectedDay as utilGetSelectedDay} from "../../utils/getSelectedDay";
 
 class EventDialog extends Component {
     state = {
@@ -23,7 +24,8 @@ class EventDialog extends Component {
         start: '',
         end: '',
         startVal: '',
-        endVal: ''
+        endVal: '',
+        isEdit: ""
     }
 
     handleTimeEventChange = (event) => {
@@ -36,23 +38,23 @@ class EventDialog extends Component {
             start: new Date(startEventTime),
             end: new Date(endEventTime)
         })
-        console.log(this.state);
     };
 
     deleteEvent() {
-        this.props.onDeletedFromCalendar(this.props.data.id)
-        this.props.onCloseAction()
-    }
-
-    getSelectedDay = (val) => {
-        return new Date(val.getFullYear(), val.getMonth(), val.getDate(), 0, 0, 0).valueOf()
+        let isDelete = confirm("Удалить Запись?");
+        if (!isDelete) {
+            this.props.onCloseAction()
+        } else {
+            this.props.onDeletedFromCalendar(this.props.data.id)
+            this.props.onCloseAction()
+        }
     }
 
     updateEvent() {
         const {onCloseAction} = this.props
         const {start, end, timeEvent} = this.state
         const {id} = this.props.data;
-        const curDay = this.getSelectedDay(start)
+        const curDay = utilGetSelectedDay(start)
         let startVal = start.valueOf()
         let endVal = end.valueOf()
         let appointment = {id, start, end, startVal, endVal, timeEvent, curDay};
@@ -87,28 +89,25 @@ class EventDialog extends Component {
 
     render() {
         const {data, onCloseAction} = this.props
-        /* const eventActions = dayNow ? <DialogActions>
-                 <Button onClick={this.handleClose}>Отмена</Button>
-                 <Button onClick={() => this.deleteEvent()}>Удалить</Button>
-                 <Button onClick={() => this.updateEvent()}>Редактировать</Button>
-             </DialogActions> :
-             <DialogActions>
-                 <Button onClick={this.handleClose}>Закрыть</Button>
-             </DialogActions>;*/
-        const eventActions = <DialogActions>
-            <Button onClick={onCloseAction}>Отмена</Button>
-            <Button onClick={() => this.deleteEvent()}>Удалить</Button>
-            <Button type="submit">Редактировать</Button>
-        </DialogActions>;
+        const eventActions = data.isView ? <DialogActions>
+                <Button onClick={onCloseAction}>Отмена</Button>
+                <Button onClick={() => this.deleteEvent()}>Удалить</Button>
+                <Button type="submit">Редактировать</Button>
+            </DialogActions> :
+            <DialogActions>
+                <Button onClick={onCloseAction}>Закрыть</Button>
+            </DialogActions>;
         return (
             <Dialog
+                fullWidth={true}
+                maxWidth={'sm'}
                 open={data.openEvent}
                 onClose={onCloseAction}>
                 <ValidatorForm
                     ref="form"
                     onSubmit={() => this.updateEvent()}>
                     <DialogTitle onClose={onCloseAction}>
-                        {`Просмотр/перенос услуги`}
+                        {data.isView? `Просмотр/перенос услуги`: `Просмотр`}
                     </DialogTitle>
                     <DialogContent dividers>
                         <FormGroup>
@@ -133,28 +132,30 @@ class EventDialog extends Component {
                                 value={data.desc.value}
                                 validators={['required']}
                                 errorMessages={['Это поле обязательно']}>
-                                <MenuItem value="hair_cut">Стрижка</MenuItem>
-                                <MenuItem value="make_up">Make up</MenuItem>
-                                <MenuItem value="manicure">Маникюр</MenuItem>
-                                <MenuItem value="eyebrowe">Брови</MenuItem>
-                                <MenuItem value="pedicure">Педикюр</MenuItem>
-                                <MenuItem value="hair_color">Окрашивание волос</MenuItem>
+
+                                <MenuItem value={data.desc.value}>{data.desc.text}</MenuItem>
+
                             </TextValidator>
                         </FormGroup>
                         <FormGroup>
                             <TextValidator
                                 label="Время"
-                                value={this.state.timeEvent}
+                                value={!data.isView? data.timeEvent : this.state.timeEvent}
                                 onChange={this.handleTimeEventChange}
                                 name="time"
                                 select
+                                autoFocus
+                                disabled={!data.isView? true: false}
                                 validators={['required']}
                                 errorMessages={['Это поле обязательно']}>
-                                {data.freeTimes.map((item, key) =>
-                                    <MenuItem key={key} value={`${item.startVal}_${item.endVal}`}>
-                                        {moment(new Date(item.startVal)).format("LT")} - {moment(new Date(item.endVal)).format("LT")}
+                                {!data.isView ? <MenuItem value={`${data.startVal}_${data.endVal}`} selected="true">
+                                        {moment(new Date(data.startVal)).format("LT")} - {moment(new Date(data.endVal)).format("LT")}
                                     </MenuItem>
-                                )}
+                                    : data.freeTimes.map((item, key) =>
+                                        <MenuItem key={key} value={`${item.startVal}_${item.endVal}`}>
+                                            {moment(new Date(item.startVal)).format("LT")} - {moment(new Date(item.endVal)).format("LT")}
+                                        </MenuItem>
+                                    )}
                             </TextValidator>
                         </FormGroup>
                     </DialogContent>
@@ -174,7 +175,6 @@ const mapDispatchToProps = (dispatch) => {
     return {
         onUpdateFromCalendar: (updateEvent) => dispatch(eventUpdateFromCalendar(updateEvent)),
         onDeletedFromCalendar: (eventId) => dispatch(eventRemoveFromCalendar(eventId)),
-
     }
 }
 

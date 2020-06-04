@@ -9,7 +9,7 @@ import FormGroup from "@material-ui/core/FormGroup";
 import MenuItem from "@material-ui/core/MenuItem";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
-import {getAppointmentsFreeTime} from "../../utils/appointments_time";
+import {getAppointmentFreeTimes as utilGetAppointmentFreeTimes} from "../../utils/getAppointmentFreeTimes";
 import {
     eventAddedToCalendar,
 } from "../../actions";
@@ -105,7 +105,7 @@ class AppointmentDialog extends Component {
         const currentDay = this.props.curDay
         const serviceOption = allServices.find((item) => item.value === e)
 
-        const freeOptions = getAppointmentsFreeTime(this.props.daySchedule, serviceOption.time)
+        const freeOptions = utilGetAppointmentFreeTimes(this.props.daySchedule, serviceOption.time)
         this.setState({
             desc: {
                 value: e,
@@ -135,7 +135,7 @@ class AppointmentDialog extends Component {
 
     componentDidUpdate(prevProps, prevState, snapshot) {
 
-        if(this.props.data.openSlot !== prevProps.data.openSlot){
+        if (this.props.data.openSlot !== prevProps.data.openSlot) {
             this.setState({
                 start: '',
                 title: '',
@@ -151,27 +151,38 @@ class AppointmentDialog extends Component {
     }
 
     render() {
-        const {data} = this.props
+        const {data, onCloseAction} = this.props
         const {freeTimes} = this.state
-const services = allServices.map((item)=><MenuItem key={item.value} value={item.value}>{item.text}</MenuItem>)
+        const services = allServices.map((item) => <MenuItem key={item.value} value={item.value}>{item.text}</MenuItem>)
         const appointmentActions = <DialogActions>
-            <Button onClick={this.props.onCloseAction}>Закрыть</Button>
+            <Button onClick={onCloseAction}>Закрыть</Button>
             <Button type="submit">Записать</Button>
         </DialogActions>;
 
+        const MenuProps = {
+            PaperProps: {
+                style: {
+                    maxHeight: 150,
+                },
+            },
+        };
+
         return (
             <Dialog
+                fullWidth={true}
+                maxWidth={'sm'}
                 open={data.openSlot}
-                onClose={this.props.onCloseAction}>
+                onClose={onCloseAction}>
                 <ValidatorForm
                     ref="form"
                     onSubmit={() => this.setNewAppointment()}>
-                    <DialogTitle onClose={this.props.onCloseAction}>
-                        {`Запись на ${moment(this.state.start).format("D.MM.YY")}`}
+                    <DialogTitle onClose={onCloseAction}>
+                        {`Запись на ${moment(data.start).format("D.MM.YY")}`}
                     </DialogTitle>
                     <DialogContent dividers>
                         <FormGroup>
                             <TextValidator
+                                autoFocus
                                 label="Ф.И.О."
                                 onChange={(e) => this.handleTitle(e.target.value)}
                                 name="full_name"
