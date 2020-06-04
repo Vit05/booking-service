@@ -133,7 +133,7 @@ class Calendar extends Component {
                     footer={calendarFooter}
                     views={calendarView}
                     eventLimit={true}
-                    slotDuration={"00:30:00"}
+                    slotDuration={"00:60:00"}
                     allDaySlot={false}
                     contentHeight={"auto"}
                     minTime={"10:00:00"}

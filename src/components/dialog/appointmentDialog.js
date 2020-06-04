@@ -14,7 +14,9 @@ import {
     eventAddedToCalendar,
 } from "../../actions";
 import {connect} from "react-redux";
+import {allServices} from "../../utils/services-list";
 
+/*
 const services = [
     {
         value: "hair_cut",
@@ -42,6 +44,7 @@ const services = [
         time: 6
     },
 ]
+*/
 
 class AppointmentDialog extends Component {
     state = {
@@ -100,7 +103,7 @@ class AppointmentDialog extends Component {
 
     handleService(e) {
         const currentDay = this.props.curDay
-        const serviceOption = services.find((item) => item.value === e)
+        const serviceOption = allServices.find((item) => item.value === e)
 
         const freeOptions = getAppointmentsFreeTime(this.props.daySchedule, serviceOption.time)
         this.setState({
@@ -150,7 +153,7 @@ class AppointmentDialog extends Component {
     render() {
         const {data} = this.props
         const {freeTimes} = this.state
-
+const services = allServices.map((item)=><MenuItem key={item.value} value={item.value}>{item.text}</MenuItem>)
         const appointmentActions = <DialogActions>
             <Button onClick={this.props.onCloseAction}>Закрыть</Button>
             <Button type="submit">Записать</Button>
@@ -187,11 +190,7 @@ class AppointmentDialog extends Component {
                                 value={this.state.desc.value}
                                 validators={['required']}
                                 errorMessages={['Это поле обязательно']}>
-                                <MenuItem value="hair_cut">Стрижка</MenuItem>
-                                <MenuItem value="make_up">Make up</MenuItem>
-                                <MenuItem value="manicure">Маникюр</MenuItem>
-                                <MenuItem value="eyebrowe">Брови</MenuItem>
-                                <MenuItem value="hair_color">Окрашивание волос</MenuItem>
+                                {services}
                             </TextValidator>
                         </FormGroup>
 
