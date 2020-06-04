@@ -1,3 +1,5 @@
+import _ from "lodash"
+
 const getDayEvents = (events, day) => {
     let currentDay = [day]
 
@@ -5,24 +7,53 @@ const getDayEvents = (events, day) => {
         return currentDay.indexOf(itm.curDay) > -1;
     });
 
-    return filteredArray
+
+    let schedule;
+    const freeTimes = []
+
+
+    for (let ob = 0; ob < filteredArray.length; ob++) {
+        freeTimes.push(filteredArray[ob].start, filteredArray[ob].end)
+    }
+    const sortedArray = freeTimes.sort((a, b) => a.valueOf() - b.valueOf())
+    let countEl = sortedArray.length
+
+
+    let finishArray;
+    const setStartSchedule = new Date(day).setHours(10, 0, 0)
+    const setEndSchedule = new Date(day).setHours(20, 0, 0)
+
+
+    if (sortedArray[0] && sortedArray[0].getHours() === 10) {
+        sortedArray.shift()
+    } else {
+        sortedArray.unshift(new Date(setStartSchedule))
+    }
+
+    if (sortedArray[countEl] && sortedArray[countEl].getHours() === 20) {
+        sortedArray.pop()
+    } else {
+        sortedArray.push(new Date(setEndSchedule))
+    }
+
+    let unique = [...new Set(sortedArray)];
+
+    return unique
 }
 
-const getFreeEvents = (daySchedule, dayEvents) => {
-    const props = ['startVal', 'endVal'];
+const getFreeTimes = (times) => {
+    if (times[times.length - 1].valueOf() === times[times.length - 2].valueOf()) {
+        times.length = times.length - 2
+    }
+    let finish = []
+    for (let i = 0; i < times.length; i += 2) {
+        finish.push({
+            start: times[i].valueOf(),
+            end: times[i + 1].valueOf()
+        })
 
-    var result = daySchedule.filter(function (o1) {
-        return !dayEvents.some(function (o2) {
-            return o1.startVal === o2.startVal;
-        });
-    }).map(function (o) {
-        return props.reduce(function (newo, name) {
-            newo[name] = o[name];
-            return newo;
-        }, {});
-    });
-
-    return result
+    }
+    return finish
 }
 
 
@@ -30,49 +61,7 @@ const updateCurrentDayEvents = (state, action) => {
     if (state === undefined) {
         return {
             currentDayEvents: [],
-            daySchedule: [
-                {
-                    startVal: "10",
-                    endVal: "11"
-                },
-                {
-                    startVal: "11",
-                    endVal: "12"
-                },
-                {
-                    startVal: "12",
-                    endVal: "13"
-                },
-                {
-                    startVal: "13",
-                    endVal: "14"
-                },
-                {
-                    startVal: "14",
-                    endVal: "15"
-                },
-                {
-                    startVal: "15",
-                    endVal: "16"
-                },
-                {
-                    startVal: "16",
-                    endVal: "17"
-                },
-                {
-                    startVal: "17",
-                    endVal: "18"
-                },
-                {
-                    startVal: "18",
-                    endVal: "19"
-                },
-                {
-                    startVal: "19",
-                    endVal: "20"
-                },
-
-            ]
+            daySchedule: []
         }
     }
     switch (action.type) {
@@ -80,18 +69,12 @@ const updateCurrentDayEvents = (state, action) => {
 
         case 'FETCH_DAY_EVENTS_SUCCESS':
             const curDayEvents = getDayEvents(state.eventBookingList.events, action.currentDay)
-            const freeEvents = getFreeEvents(action.daySchedule, curDayEvents)
-            // console.log("DAY EVENTS---", curDayEvents);
-            // console.log("FREE EVENTS---", freeEvents);
+            const curFreeTimes = getFreeTimes(curDayEvents)
 
             return {
                 currentDayEvents: curDayEvents,
-                daySchedule: freeEvents
+                daySchedule: curFreeTimes
             }
-
-        /*case 'FETCH_DAY_EVENTS_FREE_SUCCESS':
-
-            return daySchedule*/
 
         default:
             return state.dayEvents

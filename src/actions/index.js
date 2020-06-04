@@ -48,11 +48,10 @@ export const eventUpdateFromCalendar = (updateEvent)=>{
     }
 }
 
-export const dayEventsLoaded = (currentDay, daySchedule) => {
+export const dayEventsLoaded = (currentDay) => {
     return {
         type: 'FETCH_DAY_EVENTS_SUCCESS',
-        currentDay,
-        daySchedule
+        currentDay
     }
 }
 

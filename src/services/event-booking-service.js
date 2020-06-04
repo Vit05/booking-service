@@ -2,133 +2,84 @@ export default class EventBookingService {
 
     data = [
         {
-            id: "iddd21",
-            title: "Валерия Григорян",
-            start: new Date(2020, 4, 25, 17, 0, 0),
-            end: new Date(2020, 4, 25, 18, 0, 0),
-            startVal: new Date(2020, 4, 25, 17, 0, 0).valueOf(),
-            endVal: new Date(2020, 4, 25, 18, 0, 0).valueOf(),
-            curDay: new Date(2020, 4, 25, 0, 0, 0).valueOf(),
-            desc: {value:"hair_cut",text: "Стрижка"}
-        },
-        {
-            id: "iddd22",
-            title: "Света Васильева",
-            start: new Date(2626, 4, 26, 10, 0, 0),
-            end: new Date(2626, 4, 26, 11, 0, 0),
-            startVal: new Date(2626, 4, 26, 10, 0, 0).valueOf(),
-            endVal: new Date(2626, 4, 26, 11, 0, 0).valueOf(),
-            curDay: new Date(2626, 4, 26, 0, 0, 0).valueOf(),
-            desc: {value:"pedicure",text: "Педикюр"}
-        },
-        {
-            id: "iddd23",
-            title: "Станислав",
-            start: new Date(2020, 4, 28, 12, 0, 0),
-            end: new Date(2020, 4, 28, 13, 0, 0),
-            startVal: new Date(2020, 4, 28, 12, 0, 0).valueOf(),
-            endVal: new Date(2020, 4, 28, 13, 0, 0).valueOf(),
-            curDay: new Date(2020, 4, 28, 0, 0, 0).valueOf(),
-            desc: {value:"hair_cut",text: "Стрижка"}
-        }, {
-            id: "iddd25",
-            title: "Вика Серова",
-            start: new Date(2020, 4, 28, 14, 0, 0),
-            end: new Date(2020, 4, 28, 15, 0, 0),
-            startVal: new Date(2020, 4, 28, 14, 0, 0).valueOf(),
-            endVal: new Date(2020, 4, 28, 15, 0, 0).valueOf(),
-            curDay: new Date(2020, 4, 28, 0, 0, 0).valueOf(),
-            desc: {value:"make_up",text: "Make UP"}
-        }, {
-            id: "iddd26",
-            title: "Андрей Данчук",
-            start: new Date(2020, 4, 29, 10, 0, 0),
-            end: new Date(2020, 4, 29, 11, 0, 0),
-            startVal: new Date(2020, 4, 29, 10, 0, 0).valueOf(),
-            endVal: new Date(2020, 4, 29, 11, 0, 0).valueOf(),
-            curDay: new Date(2020, 4, 29, 0, 0, 0).valueOf(),
-            desc: {value:"barber",text: "Борода"}
-        }, {
-            id: "iddd27",
-            title: "Марина Гришына",
-            start: new Date(2020, 4, 29, 17, 0, 0),
-            end: new Date(2020, 4, 29, 18, 0, 0),
-            startVal: new Date(2020, 4, 29, 17, 0, 0).valueOf(),
-            endVal: new Date(2020, 4, 29, 18, 0, 0).valueOf(),
-            curDay: new Date(2020, 4, 29, 0, 0, 0).valueOf(),
-            desc: {value:"hair_color",text: "Окрашивание волос"}
-        },
-        {
-            id: "iddd28",
-            title: "Дарья Донцова",
-            start: new Date(2020, 4, 22, 15, 0, 0),
-            end: new Date(2020, 4, 22, 16, 0, 0),
-            startVal: new Date(2020, 4, 22, 15, 0, 0).valueOf(),
-            endVal: new Date(2020, 4, 22, 16, 0, 0).valueOf(),
-            curDay: new Date(2020, 4, 22, 0, 0, 0).valueOf(),
-            desc: {value:"bla_bla_bla",text: "Просто поболтать"}
-        },
-        {
-            id: "iddd29",
-            title: "Сергей Власюк",
-            start: new Date(2020, 4, 27, 15, 0, 0),
-            end: new Date(2020, 4, 27, 16, 0, 0),
-            startVal: new Date(2020, 4, 27, 15, 0, 0).valueOf(),
-            endVal: new Date(2020, 4, 27, 16, 0, 0).valueOf(),
-            curDay: new Date(2020, 4, 27, 0, 0, 0).valueOf(),
-
-            desc: {value:"hair_cut",text: "Стрижка"}
-        },
-        {
-            id: "iddd30",
-            title: "Ольга Бузова",
-            start: new Date(2020, 4, 27, 11, 0, 0),
-            end: new Date(2020, 4, 27, 12, 0, 0),
-            startVal: new Date(2020, 4, 27, 11, 0, 0).valueOf(),
-            endVal: new Date(2020, 4, 27, 12, 0, 0).valueOf(),
-            curDay: new Date(2020, 4, 27, 0, 0, 0).valueOf(),
-            desc: {value:"botox",text: "Ботокс"}
-        },
-        {
-            id: "iddd35",
-            title: "Галина Никина",
-            start: new Date(2020, 4, 30, 19, 0, 0),
-            end: new Date(2020, 4, 30, 20, 0, 0),
-            startVal: new Date(2020, 4, 30, 19, 0, 0).valueOf(),
-            endVal: new Date(2020, 4, 30, 20, 0, 0).valueOf(),
-            curDay: new Date(2020, 4, 30, 0, 0, 0).valueOf(),
-            desc: {value:"hair_color",text: "Окрашивание волос"}
-        },
-        {
-            id: "iddd36",
-            title: "Саша Валева",
-            start: new Date(2020, 4, 30, 13, 0, 0),
-            end: new Date(2020, 4, 30, 14, 0, 0),
-            startVal: new Date(2020, 4, 30, 13, 0, 0).valueOf(),
-            endVal: new Date(2020, 4, 30, 14, 0, 0).valueOf(),
-            curDay: new Date(2020, 4, 30, 0, 0, 0).valueOf(),
-            desc: {value:"pedicure",text: "Педикюр"}
-        },
-        {
             id: "iddd37",
             title: "Вадим Велиев",
-            start: new Date(2020, 4, 31, 12, 0, 0),
-            end: new Date(2020, 4, 31, 13, 0, 0),
-            startVal: new Date(2020, 4, 31, 12, 0, 0).valueOf(),
-            endVal: new Date(2020, 4, 31, 13, 0, 0).valueOf(),
-            curDay: new Date(2020, 4, 31, 0, 0, 0).valueOf(),
-            desc: {value:"hair_cut",text: "Стрижка"}
+            start: new Date(2020, 5, 2, 12, 0, 0),
+            end: new Date(2020, 5, 2, 13, 0, 0),
+            startVal: new Date(2020, 5, 2, 12, 0, 0).valueOf(),
+            endVal: new Date(2020, 5, 2, 13, 0, 0).valueOf(),
+            curDay: new Date(2020, 5, 2, 0, 0, 0).valueOf(),
+            desc: {value: "hair_cut", text: "Стрижка", time: 2}
         },
-
+        {
+            id: "iddd41",
+            title: "Алиса Алисова",
+            start: new Date(2020, 5, 2, 15, 0, 0),
+            end: new Date(2020, 5, 2, 16, 0, 0),
+            startVal: new Date(2020, 5, 2, 15, 0, 0).valueOf(),
+            endVal: new Date(2020, 5, 2, 16, 0, 0).valueOf(),
+            curDay: new Date(2020, 5, 2, 0, 0, 0).valueOf(),
+            desc: {value: "hair_cut", text: "Стрижка", time: 2}
+        },
         {
             id: "iddd40",
             title: "Алиса Городецкая",
             start: new Date(2020, 5, 1, 10, 0, 0),
-            end: new Date(2020, 5, 1, 11, 0, 0),
+            end: new Date(2020, 5, 1, 12, 30, 0),
             startVal: new Date(2020, 5, 1, 10, 0, 0).valueOf(),
-            endVal: new Date(2020, 5, 1, 11, 0, 0).valueOf(),
+            endVal: new Date(2020, 5, 1, 12, 30, 0).valueOf(),
             curDay: new Date(2020, 5, 1, 0, 0, 0).valueOf(),
-            desc: {value:"manicure",text: "Маникюр"}
+            desc: {value: "manicure", text: "Маникюр", time: 5}
+        },
+
+        {
+            id: "iddd77",
+            title: "Алиса Городецкая",
+            start: new Date(2020, 5, 1, 13, 30, 0),
+            end: new Date(2020, 5, 1, 16, 0, 0),
+            startVal: new Date(2020, 5, 1, 13, 30, 0).valueOf(),
+            endVal: new Date(2020, 5, 1, 16, 0, 0).valueOf(),
+            curDay: new Date(2020, 5, 1, 0, 0, 0).valueOf(),
+            desc: {value: "manicure", text: "Маникюр", time: 5}
+        },
+        {
+            id: "iddd78",
+            title: "Алиса Городецкая",
+            start: new Date(2020, 5, 1, 17, 30, 0),
+            end: new Date(2020, 5, 1, 20, 0, 0),
+            startVal: new Date(2020, 5, 1, 17, 30, 0).valueOf(),
+            endVal: new Date(2020, 5, 1, 20, 0, 0).valueOf(),
+            curDay: new Date(2020, 5, 1, 0, 0, 0).valueOf(),
+            desc: {value: "manicure", text: "Маникюр", time: 5}
+        },
+        {
+            id: "iddd43",
+            title: "Алиса Городецкая",
+            start: new Date(2020, 5, 3, 18, 0, 0),
+            end: new Date(2020, 5, 3, 20, 0, 0),
+            startVal: new Date(2020, 5, 3, 18, 0, 0).valueOf(),
+            endVal: new Date(2020, 5, 3, 20, 0, 0).valueOf(),
+            curDay: new Date(2020, 5, 3, 0, 0, 0).valueOf(),
+            desc: {value: "manicure", text: "Маникюр", time: 5}
+        }, {
+            id: "iddd83",
+            title: "Алиса Городецкая",
+            start: new Date(2020, 5, 5, 10, 0, 0),
+            end: new Date(2020, 5, 5, 11, 0, 0),
+            startVal: new Date(2020, 5, 5, 10, 0, 0).valueOf(),
+            endVal: new Date(2020, 5, 5, 11, 0, 0).valueOf(),
+            curDay: new Date(2020, 5, 5, 0, 0, 0).valueOf(),
+            desc: {value: "manicure", text: "Маникюр", time: 5}
+        },
+        {
+            id: "iddd44",
+            title: "Алиса Городецкая",
+            start: new Date(2020, 5, 5, 19, 0, 0),
+            end: new Date(2020, 5, 5, 20, 0, 0),
+            startVal: new Date(2020, 5, 5, 19, 0, 0).valueOf(),
+            endVal: new Date(2020, 5, 5, 20, 0, 0).valueOf(),
+            curDay: new Date(2020, 5, 5, 0, 0, 0).valueOf(),
+            desc: {value: "manicure", text: "Маникюр", time: 5}
         },
 
     ]

@@ -2,24 +2,11 @@ const removeEvent = (items, id) => {
     return items.filter((item) => item.id !== id)
 }
 
-
-
 const updateEvent = (state, updateEvent) => {
 
     const {eventBookingList: {events}} = state
-    // console.log("@@@_EVENTS--- ", events)
     const event = events.find(({id}) => id === updateEvent.id)
     const eventIndex = events.findIndex(({id}) => id === updateEvent.id)
-    console.log(eventIndex);
-    console.log("@@@_EVENT--- ",
-        {
-            ...event,
-            start: updateEvent.start,
-            end:updateEvent.end,
-            curDay: updateEvent.curDay,
-            startVal: updateEvent.startVal,
-            endVal:updateEvent.endVal
-        })
 
     const updatedItem =  {
         ...event,
@@ -37,29 +24,6 @@ const updateEvent = (state, updateEvent) => {
         ...events.slice(eventIndex + 1)
     ]
 }
-
-/*const updateEventItems = (eventItems, item, idx) => {
-   /!* if (item.count === 0) {
-        return [
-            ...eventItems.slice(0, idx),
-            ...eventItems.slice(idx + 1)
-        ]
-    }
-    if (idx === -1) {
-        return [
-            ...eventItems,
-            item
-        ]
-    }*!/
-    return [
-        ...eventItems.slice(0, idx),
-        item,
-        ...eventItems.slice(idx + 1)
-    ]
-
-}*/
-
-
 
 const updateEvents = (state, updateEvent)=>{
 
@@ -112,11 +76,6 @@ const updateEventBookingList = (state, action) => {
            return {
                events: updateEvent(state, action.payload)
            }
-            /*return {
-                events: removeEvent(state.eventBookingList.events, action.payload),
-                loading: false,
-                error: null,
-            }*/
         default:
             return state.eventBookingList
     }
