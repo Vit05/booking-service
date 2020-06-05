@@ -71,6 +71,16 @@ const EventDetail = ({event, el, view}) => {
     return el;
 };
 
+const handlerDayrander = ({date, el, view}) => {
+    console.log(el.getAttribute('data-date'));
+    console.log(date.getDate());
+    if (date.getDate() % 2 === 0) {
+        el.setAttribute("style", "background: #eee3e3")
+    }
+
+    // el.style('background: red')
+}
+
 class Calendar extends Component {
     state = {
         allDay: false,
@@ -86,7 +96,7 @@ class Calendar extends Component {
             desc: {
                 value: "",
                 text: "",
-                time:""
+                time: ""
             },
             freeTimes: [],
             dayEventsLoad: [],
@@ -104,7 +114,7 @@ class Calendar extends Component {
             desc: {
                 value: "",
                 text: "",
-                time:""
+                time: ""
             },
             freeTimes: [],
             dayEventsLoad: [],
@@ -147,6 +157,7 @@ class Calendar extends Component {
                     eventClick={(value) => this.handleEventSelected(value)}
                     ref={this.calendarComponentRef}
                     editable={false}
+                    dayRender={handlerDayrander}
                     eventRender={EventDetail}
                     events={events}/>
 
@@ -159,9 +170,18 @@ class Calendar extends Component {
     }
 
     handleDateNow = (selected) => {
+        // console.log("selectedDay", selected.getDay());
         const dateNow = new Date(Date.now())
         let openSlot;
-        selected < utilGetSelectedDay(dateNow) ? openSlot = false : openSlot = true
+        // selected < utilGetSelectedDay(dateNow) && selected.getDate() % 2 === 0 ? openSlot = false : openSlot = true
+
+        if (selected < utilGetSelectedDay(dateNow)) {
+            openSlot = false
+        } else {
+            selected.getDate() % 2 === 0 ? openSlot = false : openSlot = true
+
+        }
+        console.log(openSlot);
         return openSlot
     }
 
