@@ -10,6 +10,33 @@ import Button from "@material-ui/core/Button";
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItem from '@material-ui/core/ListItem';
 import {Link} from "react-router-dom";
+import './header.scss'
+
+const Navigation = (props) => {
+    const {headerClass} = props
+    return (
+        <List className={headerClass}>
+            <ListItem>
+                <Typography variant="button" display="block">
+                    <Link to="/">Home</Link>
+                </Typography>
+            </ListItem>
+            {/* <ListItem >
+                            <Link to="/calendar">Calendar</Link>
+                        </ListItem>*/}
+            <ListItem>
+                <Typography variant="button" display="block">
+                    <Link to="/masters">Masters</Link>
+                </Typography>
+            </ListItem>
+            <ListItem>
+                <Typography variant="button" display="block">
+                    <Link to="/faq">FAQ</Link>
+                </Typography>
+            </ListItem>
+        </List>
+    )
+}
 
 const MainDrawer = () => {
 
@@ -33,20 +60,7 @@ const MainDrawer = () => {
                     onClick={toggleDrawer("left", false)}
                     onKeyDown={toggleDrawer("left", false)}
                 >
-                    <List>
-                        <ListItem>
-                            <Link to="/">Home</Link>
-                        </ListItem>
-                        <ListItem >
-                            <Link to="/calendar">Calendar</Link>
-                        </ListItem>
-                        <ListItem >
-                            <Link to="/masters">Masters</Link>
-                        </ListItem>
-                        <ListItem >
-                            <Link to="/faq">FAQ</Link>
-                        </ListItem>
-                    </List>
+                    <Navigation headerClass="drawerNavigation"/>
 
                 </div>
             </Drawer>
@@ -60,9 +74,10 @@ const MainDrawer = () => {
                         onClick={toggleDrawer("left", true)}>
                         <Menu/>
                     </IconButton>
-                    <Typography variant="h6" className="">
-                        News
+                    <Typography variant="caption">
+                        AirBeauty
                     </Typography>
+                    <Navigation headerClass="headerNavigation"/>
                     <Button color="inherit">Login</Button>
                 </Toolbar>
             </AppBar>

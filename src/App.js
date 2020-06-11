@@ -1,6 +1,12 @@
 import React, {Component} from 'react';
-import {BrowserRouter as Router, Switch, Route, Redirect, BrowserHistory} from 'react-router-dom';
-
+import {
+    BrowserRouter as Router,
+    Route,
+    Link,
+    Switch,
+    Redirect,
+    useLocation
+} from "react-router-dom";
 import Calendar from "./components/calendar";
 // import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
@@ -10,6 +16,7 @@ import './main.scss'
 import MainDrawer from "./components/header/Drawer"
 import MastersPage from "./pages/mastersPage";
 import Faq from "./pages/faqPage";
+import CalendarPage from "./pages/calendarPage";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -42,27 +49,25 @@ export default class App extends Component {
 
         return (
             <div className="wrapper">
-                <Router history={BrowserHistory}>
+                <Router>
 
                     <MainDrawer/>
 
                     <Container component="main" maxWidth="md" className="main">
-                        {/*<Calendar/>*/}
+
                         <Switch>
-                            <Route path="/"
+                            <Route path="/" exact
                                    render={() => <h1>Home page</h1>}
-                                   exact/>
+                            />
 
                             {/*<Route path="/call" exact component={Calendar}/>*/}
                             <Route path="/masters" exact component={MastersPage}/>
-                            <Route path="/calendar" exact component={Calendar}/>
+                            {/*<Route path="/calendar" exact component={Calendar}/>*/}
                             <Route path="/faq" exact component={Faq}/>
-
-                            {/*  <Route path="/starships/:id"
-                           render={({ match }) => {
-                               const { id } = match.params;
-                               return <StarshipDetails itemId={id} />
-                           }}/>*/}
+                            <Route path="/master/:id"
+                                   render={() => {
+                                       return <CalendarPage itemId={1}/>
+                                   }}/>
 
                             <Route render={() => <h2>Page not found</h2>}/>
                         </Switch>
